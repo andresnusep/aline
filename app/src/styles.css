@@ -201,7 +201,8 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outli
 
 /* ---------- Start ---------- */
 .start { min-height: 620px; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
-.start-word { font-size: 88px; font-weight: 700; letter-spacing: -5px; line-height: 0.85; }
+.logo { display: block; height: auto; }
+.start-word { width: 210px; margin-bottom: 6px; }
 .start-tag { font-size: 28px; font-weight: 700; line-height: 1; text-transform: uppercase; }
 .start .body { max-width: 290px; }
 
@@ -278,11 +279,9 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outli
   border: none;
   background: none;
   padding: 0;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
   color: var(--ink);
 }
+.wordmark-btn .logo { height: 18px; width: auto; }
 .dj-card {
   display: flex;
   align-items: center;
@@ -469,7 +468,8 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outli
 .toast.web { left: auto; right: 24px; top: 84px; max-width: 360px; border-radius: 24px; padding: 14px 20px; }
 
 .w-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 32px; border-bottom: 1.5px solid var(--ink); flex-wrap: wrap; }
-.w-wordmark { border: none; background: none; padding: 0; font-size: 30px; font-weight: 700; letter-spacing: -1.5px; color: var(--ink); }
+.w-wordmark { border: none; background: none; padding: 0; color: var(--ink); }
+.w-wordmark .logo { height: 30px; width: auto; }
 .w-header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .w-event-pill { height: 40px; padding: 0 18px; border-radius: 20px; background: var(--ink); color: var(--purple); display: flex; align-items: center; font-size: 14px; font-weight: 700; }
 .web .btn-pill { height: 40px; padding: 0 18px; border-radius: 20px; }
@@ -478,7 +478,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outli
 /* Start */
 .w-start { flex: 1; display: flex; flex-wrap: wrap; gap: 48px; align-items: center; padding: 56px 32px; max-width: 1240px; width: 100%; margin: 0 auto; }
 .w-start-badge { flex: 1 1 420px; max-width: 520px; background: var(--ink); color: var(--purple); border-radius: 260px 260px 40px 40px; padding: 96px 44px 44px; display: flex; flex-direction: column; gap: 12px; }
-.w-start-word { font-size: clamp(96px, 12vw, 168px); font-weight: 700; letter-spacing: -0.06em; line-height: 0.85; }
+.w-start-word { width: min(100%, 400px); margin-bottom: 8px; }
 .w-start-tag { font-size: 32px; font-weight: 700; line-height: 1; text-transform: uppercase; margin-top: 12px; }
 .w-start-badge .shapes { gap: 8px; margin-top: 32px; }
 .w-start-copy { flex: 1 1 360px; display: flex; flex-direction: column; gap: 28px; }

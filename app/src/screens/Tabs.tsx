@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { flowView, lineupIndex, lineupRows, repeatsView, setView, type Bar } from '../lib/analysis';
 import { INVITE_LINK } from '../lib/demo';
+import { Logo } from '../components/Logo';
 import { config, useApp } from '../state';
 
 /** Bar chart; without `height` it fills its container (sized in CSS). */
@@ -40,8 +41,8 @@ export function EventTab() {
   return (
     <>
       <div className="topbar">
-        <button className="wordmark-btn" onClick={() => set({ flow: 'start' })}>
-          aline
+        <button className="wordmark-btn" onClick={() => set({ flow: 'start' })} aria-label="aline home">
+          <Logo />
         </button>
         <button className="btn-pill" onClick={() => share(`Join ${S.evName} on aline`, INVITE_LINK, 'Invite link copied — send it to the lineup')}>
           Invite DJs

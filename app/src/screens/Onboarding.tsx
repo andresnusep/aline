@@ -1,3 +1,4 @@
+import { Logo } from '../components/Logo';
 import { Shapes } from '../components/Shapes';
 import { INVITE_LINK, ME_LINK } from '../lib/demo';
 import { useApp } from '../state';
@@ -16,7 +17,7 @@ export function Start() {
   return (
     <div className="start">
       <div className="col g14" style={{ paddingTop: 24 }}>
-        <div className="start-word">aline</div>
+        <Logo className="start-word" />
         <div className="start-tag">
           Same night,
           <br />

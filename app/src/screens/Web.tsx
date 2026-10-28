@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Logo } from '../components/Logo';
 import { Shapes } from '../components/Shapes';
 import { flowView, lineupRows, repeatsView, setView } from '../lib/analysis';
 import { INVITE_LINK } from '../lib/demo';
@@ -9,8 +10,8 @@ export function WebHeader() {
   const { state: S, set, share } = useApp();
   return (
     <header className="w-header">
-      <button className="w-wordmark" onClick={() => set({ flow: 'start' })}>
-        aline
+      <button className="w-wordmark" onClick={() => set({ flow: 'start' })} aria-label="aline home">
+        <Logo />
       </button>
       {!S.flow && (
         <div className="w-header-actions">
@@ -31,7 +32,7 @@ export function WebStart() {
   return (
     <div className="w-start">
       <div className="w-start-badge">
-        <div className="w-start-word">aline</div>
+        <Logo className="w-start-word" />
         <div className="w-start-tag">
           Same night,
           <br />
