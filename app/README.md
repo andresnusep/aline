@@ -29,3 +29,15 @@ Prototype settings are URL parameters:
 - `src/lib/demo.ts` — demo sets for SOL MONTES and PERRO SALVAJE
 - `src/state.tsx` — app state, file import, toasts, share/copy
 - `src/screens/` — onboarding screens (start, create, created, join, saved) and the Event / Set / Lineup tabs
+
+## Deploy (Cloudflare Pages via GitHub)
+
+In Cloudflare: Workers & Pages → Create → Pages → Connect to Git → pick this repo, then:
+
+- Production branch: `main`
+- Framework preset: Vite (or None)
+- Root directory: `app`
+- Build command: `npm run build`
+- Build output directory: `dist`
+
+Every push to `main` redeploys; other branches get preview URLs.
