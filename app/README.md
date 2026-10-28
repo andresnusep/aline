@@ -30,14 +30,13 @@ Prototype settings are URL parameters:
 - `src/state.tsx` — app state, file import, toasts, share/copy
 - `src/screens/` — onboarding screens (start, create, created, join, saved) and the Event / Set / Lineup tabs
 
-## Deploy (Cloudflare Pages via GitHub)
+## Deploy (Cloudflare Workers via GitHub)
 
-In Cloudflare: Workers & Pages → Create → Pages → Connect to Git → pick this repo, then:
+Deployed as a Worker with static assets, configured in `wrangler.jsonc`: `wrangler deploy` runs
+`npm run build` and uploads `dist/`. In the Worker's Settings → Build:
 
-- Production branch: `main`
-- Framework preset: Vite (or None)
 - Root directory: `app`
-- Build command: `npm run build`
-- Build output directory: `dist`
+- Build command: `npm run build` (or empty — wrangler builds anyway)
+- Deploy command: `npx wrangler deploy`
 
-Every push to `main` redeploys; other branches get preview URLs.
+Every push to `main` redeploys.
