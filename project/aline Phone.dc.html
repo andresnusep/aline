@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#121212;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#111;text-decoration:underline}a:hover{color:#3b2b94}
+button{font-family:inherit}
+*::-webkit-scrollbar{display:none}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:72px;padding:56px 24px;box-sizing:border-box;color:#111">
+  <sc-if value="{{ showLogo }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:28px;align-items:flex-start">
+      <div style="width:300px;background:#111;border-radius:150px 150px 28px 28px;padding:64px 28px 28px;box-sizing:border-box;display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:100px;font-weight:700;letter-spacing:-6px;line-height:0.85;color:#9d8cf2">aline</div>
+        <div style="font-size:21px;font-weight:700;line-height:1.05;color:#9d8cf2;text-transform:uppercase;margin-top:10px">Same night,<br>no repeats</div>
+        <div style="display:flex;gap:6px;margin-top:22px">
+          <div style="width:52px;height:52px;border-radius:50%;border:3px solid #9d8cf2;box-sizing:border-box"></div>
+          <div style="flex:1;height:52px;border-radius:26px;background:#9d8cf2"></div>
+          <div style="width:52px;height:26px;margin-top:26px;border-radius:26px 26px 0 0;background:#9d8cf2"></div>
+        </div>
+      </div>
+      <div style="width:300px;background:#9d8cf2;border-radius:28px;padding:22px 24px;box-sizing:border-box;display:flex;align-items:flex-end;justify-content:space-between">
+        <div style="font-size:56px;font-weight:700;letter-spacing:-3px;line-height:0.8">aline</div>
+        <div style="font-size:12px;font-weight:700;line-height:1.1;text-transform:uppercase;text-align:right">Lineup<br>set planner</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:relative;width:390px;height:844px;border-radius:58px;border:11px solid #0b0b0b;outline:4px solid #9d8cf2;background:#9d8cf2;overflow:hidden;flex-shrink:0">
+    <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:17px;background:#0b0b0b;z-index:5"></div>
+    <input type="file" accept=".txt,text/plain" ref="{{ fileRef }}" onChange="{{ onFile }}" style="display:none">
+
+    <div style="position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding:64px 20px 120px;box-sizing:border-box;display:flex;flex-direction:column;gap:22px">
+
+      <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
+        <div style="min-height:620px;display:flex;flex-direction:column;justify-content:space-between;gap:28px">
+          <div style="display:flex;flex-direction:column;gap:14px;padding-top:24px">
+            <div style="font-size:88px;font-weight:700;letter-spacing:-5px;line-height:0.85">aline</div>
+            <div style="font-size:28px;font-weight:700;line-height:1;text-transform:uppercase">Same night,<br>no repeats</div>
+            <div style="font-size:15px;line-height:1.4;color:#2a1f6b;max-width:290px">Share your rekordbox set with the rest of the lineup. No accounts. Just links.</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <div style="width:64px;height:64px;border-radius:50%;border:2px solid #111;box-sizing:border-box"></div>
+            <div style="flex:1;height:64px;border-radius:32px;background:#111"></div>
+            <div style="width:64px;height:32px;margin-top:32px;border-radius:32px 32px 0 0;background:#111"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button onClick="{{ goCreate }}" style="height:56px;padding:0 24px;border-radius:28px;border:none;background:#111;color:#9d8cf2;font-size:17px;font-weight:700;text-align:left;cursor:pointer" style-hover="color:#fff">Create an event</button>
+            <button onClick="{{ goJoin }}" style="height:56px;padding:0 24px;border-radius:28px;border:1.5px solid #111;background:transparent;color:#111;font-size:17px;font-weight:500;text-align:left;cursor:pointer" style-hover="background:#111;color:#9d8cf2">I have an invite link</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goStart }}" style="align-self:flex-start;height:36px;width:36px;flex-shrink:0;padding:0;border-radius:50%;border:1.5px solid #111;background:transparent;font-size:16px;cursor:pointer;color:#111">←</button>
+        <div style="font-size:40px;font-weight:700;letter-spacing:-2px;line-height:0.95">New event</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:13px;font-weight:700">Event name</div>
+          <input value="{{ evName }}" onChange="{{ setEvName }}" style="height:50px;padding:0 20px;border-radius:25px;border:1.5px solid #111;background:transparent;font-size:16px;font-family:inherit;color:#111;outline:none">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:13px;font-weight:700">Date</div>
+          <input value="{{ evDate }}" onChange="{{ setEvDate }}" style="height:50px;padding:0 20px;border-radius:25px;border:1.5px solid #111;background:transparent;font-size:16px;font-family:inherit;color:#111;outline:none">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:13px;font-weight:700">Slots</div>
+          <sc-for list="{{ slotRows }}" as="s" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:8px">
+              <input value="{{ s.time }}" onChange="{{ s.set }}" style="width:92px;height:46px;padding:0 16px;box-sizing:border-box;border-radius:23px;border:none;background:#111;color:#9d8cf2;font-size:15px;font-weight:700;font-family:inherit;outline:none">
+              <div style="flex:1;height:46px;border-radius:23px;border:1.5px dashed #111;display:flex;align-items:center;padding:0 16px;font-size:14px;color:#2a1f6b">Slot {{ s.n }} · open</div>
+              <button onClick="{{ s.remove }}" style="width:46px;height:46px;border-radius:50%;border:1.5px solid #111;background:transparent;font-size:16px;cursor:pointer;color:#111">×</button>
+            </div>
+          </sc-for>
+          <button onClick="{{ addSlot }}" style="align-self:flex-start;height:38px;padding:0 16px;border-radius:19px;border:1.5px solid #111;background:transparent;font-size:14px;font-weight:500;cursor:pointer;color:#111">+ Add slot</button>
+        </div>
+        <div onClick="{{ toggleHuman }}" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:24px;border:1.5px solid #111;cursor:pointer">
+          <div style="width:24px;height:24px;border-radius:50%;border:1.5px solid #111;background:{{ humanBg }};flex-shrink:0"></div>
+          <div style="flex:1;font-size:14px">I’m human</div>
+          <div style="font-size:11px;color:#2a1f6b">Cloudflare Turnstile</div>
+        </div>
+        <button onClick="{{ createEvent }}" style="height:56px;padding:0 24px;border-radius:28px;border:none;background:#111;color:#9d8cf2;font-size:17px;font-weight:700;text-align:left;cursor:pointer;opacity:{{ createOp }}">Create event</button>
+      </sc-if>
+
+      <sc-if value="{{ isCreated }}" hint-placeholder-val="{{ false }}">
+        <div style="width:72px;height:72px;border-radius:50%;background:#111"></div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:40px;font-weight:700;letter-spacing:-2px;line-height:0.95">{{ evName }} is live</div>
+          <div style="font-size:15px;color:#2a1f6b">{{ evDate }} · {{ slotCount }} slots</div>
+        </div>
+        <div style="font-size:15px;line-height:1.4;color:#2a1f6b;max-width:300px">Send the invite to your DJs. Anyone with it can pick an open slot and add their set.</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button onClick="{{ shareInvite }}" style="height:56px;padding:0 24px;border-radius:28px;border:none;background:#111;color:#9d8cf2;font-size:17px;font-weight:700;text-align:left;cursor:pointer" style-hover="color:#fff">Share invite</button>
+          <button onClick="{{ goApp }}" style="height:56px;padding:0 24px;border-radius:28px;border:1.5px solid #111;background:transparent;font-size:17px;font-weight:500;text-align:left;cursor:pointer;color:#111">Open event</button>
+        </div>
+        <div style="font-size:13px;color:#2a1f6b">You’re the organiser on this phone.</div>
+      </sc-if>
+
+      <sc-if value="{{ isJoin }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goStart }}" style="align-self:flex-start;height:36px;width:36px;flex-shrink:0;padding:0;border-radius:50%;border:1.5px solid #111;background:transparent;font-size:16px;cursor:pointer;color:#111">←</button>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="align-self:flex-start;height:28px;padding:0 12px;border-radius:14px;background:#111;color:#9d8cf2;font-size:12px;font-weight:700;display:flex;align-items:center">You’re invited</div>
+          <div style="font-size:44px;font-weight:700;letter-spacing:-2px;line-height:0.95">{{ evName }}</div>
+          <div style="font-size:15px;color:#2a1f6b">{{ evDate }} · pick your slot</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ joinSlots }}" as="s" hint-placeholder-count="4">
+            <button onClick="{{ s.pick }}" style="display:flex;align-items:center;gap:12px;padding:8px 16px 8px 8px;border-radius:30px;border:1.5px solid #111;background:{{ s.bg }};color:{{ s.ink }};opacity:{{ s.op }};cursor:pointer;text-align:left;font-family:inherit">
+              <div style="width:44px;height:44px;border-radius:50%;border:1.5px solid {{ s.ink }};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">{{ s.time }}</div>
+              <div style="flex:1;font-size:15px;font-weight:700">{{ s.label }}</div>
+              <div style="font-size:12px">{{ s.note }}</div>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:13px;font-weight:700">Your DJ name</div>
+          <input value="{{ djName }}" onChange="{{ setDjName }}" placeholder="e.g. DJ LUNA" style="height:50px;padding:0 20px;border-radius:25px;border:1.5px solid #111;background:transparent;font-size:16px;font-family:inherit;color:#111;outline:none">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:13px;font-weight:700">Your set</div>
+          <sc-if value="{{ hasMySet }}" hint-placeholder-val="{{ false }}">
+            <div style="height:50px;border-radius:25px;background:#111;color:#fff;display:flex;align-items:center;gap:10px;padding:0 8px 0 20px;font-size:14px">
+              <div style="flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">{{ fileName }} · <span style="color:#9d8cf2">{{ myCount }} tracks</span></div>
+              <button onClick="{{ pickFile }}" style="height:36px;padding:0 14px;border-radius:18px;border:none;background:#9d8cf2;color:#111;font-size:13px;font-weight:700;cursor:pointer">Replace</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noMySet }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ pickFile }}" style="height:50px;padding:0 20px;border-radius:25px;border:1.5px dashed #111;background:transparent;font-size:15px;font-weight:500;text-align:left;cursor:pointer;color:#111">+ Add rekordbox .txt</button>
+            <button onClick="{{ loadSample }}" style="align-self:flex-start;border:none;background:none;padding:0;font-size:13px;color:#2a1f6b;text-decoration:underline;cursor:pointer">or use “Latin Club.txt”</button>
+          </sc-if>
+        </div>
+        <button onClick="{{ joinLineup }}" style="height:56px;padding:0 24px;border-radius:28px;border:none;background:#111;color:#9d8cf2;font-size:17px;font-weight:700;text-align:left;cursor:pointer;opacity:{{ joinOp }}">Join lineup</button>
+      </sc-if>
+
+      <sc-if value="{{ isSaved }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:6px;padding-top:12px">
+          <div style="width:72px;height:72px;border-radius:50%;background:#111"></div>
+          <div style="width:72px;height:72px;border-radius:50%;border:2px solid #111;box-sizing:border-box"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:40px;font-weight:700;letter-spacing:-2px;line-height:0.95">You’re in, {{ myName }}</div>
+          <div style="font-size:15px;line-height:1.4;color:#2a1f6b">This phone remembers you. Come back any time to update your set.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button onClick="{{ goApp }}" style="height:56px;padding:0 24px;border-radius:28px;border:none;background:#111;color:#9d8cf2;font-size:17px;font-weight:700;text-align:left;cursor:pointer" style-hover="color:#fff">Go to {{ evName }}</button>
+          <button onClick="{{ shareMe }}" style="align-self:flex-start;border:none;background:none;padding:0;font-size:13px;color:#2a1f6b;text-decoration:underline;cursor:pointer">Using another phone? Send yourself a link</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+
+      <sc-if value="{{ isEvent }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <button onClick="{{ goStart }}" style="border:none;background:none;padding:0;font-size:15px;font-weight:700;letter-spacing:-0.5px;cursor:pointer;color:#111">aline</button>
+          <button onClick="{{ invite }}" style="height:36px;padding:0 16px;border-radius:18px;border:1.5px solid #111;background:transparent;font-size:14px;font-weight:500;cursor:pointer;color:#111" style-hover="background:#111;color:#9d8cf2">Invite DJs</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:44px;font-weight:700;letter-spacing:-2px;line-height:0.95">{{ evName }}</div>
+          <div style="font-size:15px;color:#2a1f6b">{{ evDate }} · {{ slotCount }} DJs</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:22px;font-weight:700;letter-spacing:-0.5px">Lineup</div>
+          <sc-for list="{{ lineup }}" as="d" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:24px;border:1.5px solid #111;background:{{ d.cardBg }};color:{{ d.cardInk }}">
+              <div style="width:52px;height:52px;border-radius:50%;border:1.5px solid {{ d.cardInk }};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">{{ d.time }}</div>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                <div style="font-size:17px;font-weight:700">{{ d.name }}</div>
+                <div style="font-size:13px;opacity:0.75">{{ d.status }}</div>
+              </div>
+              <sc-if value="{{ d.needsImport }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ pickFile }}" style="height:36px;padding:0 14px;border-radius:18px;border:none;background:#9d8cf2;color:#111;font-size:13px;font-weight:700;cursor:pointer">Import</button>
+              </sc-if>
+              <sc-if value="{{ d.pending }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ remind }}" style="height:32px;padding:0 12px;border-radius:16px;border:1.5px solid #111;background:transparent;font-size:12px;font-weight:500;cursor:pointer;color:#111">Remind</button>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ noMySet }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#111;color:#fff;border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:14px">
+            <div style="font-size:24px;font-weight:700;letter-spacing:-0.5px;line-height:1.05">Add your set from rekordbox</div>
+            <div style="font-size:14px;line-height:1.4;color:#cfc6fb">In rekordbox, right-click your playlist › Export a playlist to a file › Export to a file for KUVO (*.txt).</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button onClick="{{ pickFile }}" style="height:44px;padding:0 20px;border-radius:22px;border:none;background:#9d8cf2;color:#111;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#b6a9f7">Choose .txt file</button>
+              <button onClick="{{ loadSample }}" style="height:44px;padding:0 20px;border-radius:22px;border:1.5px solid #9d8cf2;background:transparent;color:#9d8cf2;font-size:15px;font-weight:500;cursor:pointer">Use “Latin Club.txt”</button>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasMySet }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div onClick="{{ goSet }}" style="background:#111;color:#fff;border-radius:28px;padding:18px;display:flex;flex-direction:column;gap:8px;cursor:pointer">
+              <div style="font-size:40px;font-weight:700;letter-spacing:-2px;color:#9d8cf2">{{ lineupRepeatCount }}</div>
+              <div style="font-size:14px;line-height:1.2">Songs repeated across the lineup</div>
+            </div>
+            <div onClick="{{ goLineup }}" style="border:1.5px solid #111;border-radius:28px;padding:18px;display:flex;flex-direction:column;gap:8px;cursor:pointer">
+              <div style="font-size:40px;font-weight:700;letter-spacing:-2px">{{ flowRange }}</div>
+              <div style="font-size:14px;line-height:1.2">BPM range of the whole night</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#2a1f6b">
+            <div>{{ fileName }}</div>
+            <button onClick="{{ pickFile }}" style="border:none;background:none;font-size:13px;text-decoration:underline;cursor:pointer;color:#111">Replace file</button>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ isSet }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:40px;font-weight:700;letter-spacing:-2px;line-height:0.95">Set analysis</div>
+        <div style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:0 20px">
+          <sc-for list="{{ viewChips }}" as="c" hint-placeholder-count="3">
+            <button onClick="{{ c.pick }}" style="height:38px;padding:0 16px;border-radius:19px;border:1.5px solid #111;background:{{ c.bg }};color:{{ c.ink }};font-size:14px;font-weight:500;white-space:nowrap;cursor:pointer;flex-shrink:0">{{ c.name }}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ viewEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1.5px dashed #111;border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:12px">
+            <div style="font-size:18px;font-weight:700">No set imported yet</div>
+            <button onClick="{{ loadSample }}" style="align-self:flex-start;height:44px;padding:0 20px;border-radius:22px;border:none;background:#111;color:#9d8cf2;font-size:15px;font-weight:700;cursor:pointer">Use “Latin Club.txt”</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ viewLoaded }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+              <div style="border:1.5px solid #111;border-radius:24px;padding:14px 16px;display:flex;flex-direction:column;gap:4px">
+                <div style="font-size:28px;font-weight:700;letter-spacing:-1px">{{ s.v }}</div>
+                <div style="font-size:12px;color:#2a1f6b">{{ s.l }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#111;border-radius:28px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;color:#fff;font-size:14px"><div style="font-weight:700">BPM through the set</div><div style="color:#9d8cf2">{{ bpmRange }}</div></div>
+            <div style="height:120px;display:flex;align-items:flex-end;gap:1px">
+              <sc-for list="{{ setBars }}" as="b" hint-placeholder-count="30">
+                <div title="{{ b.tip }}" style="flex:1;min-width:1px;height:{{ b.h }};background:{{ b.bg }};border-radius:2px 2px 0 0"></div>
+              </sc-for>
+            </div>
+            <div style="display:flex;justify-content:space-between;color:#8a80b8;font-size:11px"><div>First track</div><div>Last track</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:15px;font-weight:700">Most used keys</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ topKeys }}" as="k" hint-placeholder-count="5">
+                <div style="height:30px;padding:0 12px;border-radius:15px;background:#111;color:#fff;display:flex;align-items:center;gap:6px;font-size:13px"><span style="font-weight:700">{{ k.key }}</span><span style="color:#9d8cf2">{{ k.n }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:22px;font-weight:700;letter-spacing:-0.5px">Tracks</div>
+              <div style="display:flex;border:1.5px solid #111;border-radius:17px;overflow:hidden">
+                <sc-for list="{{ sortOpts }}" as="o" hint-placeholder-count="2">
+                  <button onClick="{{ o.pick }}" style="height:31px;padding:0 12px;border:none;background:{{ o.bg }};color:{{ o.ink }};font-size:12px;font-weight:500;cursor:pointer">{{ o.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ trackRows }}" as="t" hint-placeholder-count="8">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1.5px solid rgba(17,17,17,0.18)">
+                  <div style="width:24px;font-size:12px;color:#2a1f6b;flex-shrink:0">{{ t.n }}</div>
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                    <div style="font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.title }}</div>
+                    <div style="font-size:12px;color:#2a1f6b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.artist }}</div>
+                    <sc-if value="{{ t.dup }}" hint-placeholder-val="{{ false }}">
+                      <div style="align-self:flex-start;margin-top:3px;height:20px;padding:0 8px;border-radius:10px;background:#111;color:#9d8cf2;font-size:11px;font-weight:700;display:flex;align-items:center">{{ t.dup }}</div>
+                    </sc-if>
+                  </div>
+                  <div style="font-size:14px;font-weight:700;flex-shrink:0">{{ t.bpm }}</div>
+                  <div style="width:38px;height:26px;border-radius:13px;border:1.5px solid #111;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">{{ t.key }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ isLineup }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:40px;font-weight:700;letter-spacing:-2px;line-height:0.95">Lineup overview</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:15px;font-weight:700">Play order</div>
+          <sc-for list="{{ lineup }}" as="d" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 8px 8px 12px;border-radius:22px;border:1.5px solid #111">
+              <div style="width:14px;height:14px;border-radius:50%;background:{{ d.swatch }};border:1.5px solid #111;flex-shrink:0"></div>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+                <div style="font-size:15px;font-weight:700">{{ d.pos }}. {{ d.name }}</div>
+                <div style="font-size:12px;color:#2a1f6b">{{ d.short }}</div>
+              </div>
+              <button onClick="{{ d.up }}" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #111;background:transparent;font-size:15px;cursor:pointer;opacity:{{ d.upOp }};color:#111" style-hover="background:#111;color:#9d8cf2">↑</button>
+              <button onClick="{{ d.down }}" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #111;background:transparent;font-size:15px;cursor:pointer;opacity:{{ d.downOp }};color:#111" style-hover="background:#111;color:#9d8cf2">↓</button>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:#111;border-radius:28px;padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;color:#fff;font-size:14px"><div style="font-weight:700">BPM flow of the night</div><div style="color:#9d8cf2">{{ flowRange }}</div></div>
+          <div style="height:130px;display:flex;align-items:flex-end;gap:1px">
+            <sc-for list="{{ flowBars }}" as="b" hint-placeholder-count="40">
+              <div title="{{ b.tip }}" style="flex:1;min-width:1px;height:{{ b.h }};background:{{ b.bg }};border-radius:2px 2px 0 0"></div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:2px;height:22px">
+            <sc-for list="{{ flowSegs }}" as="g" hint-placeholder-count="3">
+              <div style="flex:{{ g.flex }};min-width:0;border-radius:11px;background:{{ g.bg }};color:{{ g.ink }};font-size:10px;font-weight:700;display:flex;align-items:center;padding:0 8px;overflow:hidden;white-space:nowrap">{{ g.name }} · {{ g.avg }}</div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="border-radius:24px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;background:{{ checkBg }};color:{{ checkInk }};border:1.5px solid #111">
+          <div style="font-size:15px;font-weight:700">{{ checkTitle }}</div>
+          <sc-for list="{{ checkLines }}" as="l" hint-placeholder-count="1">
+            <div style="font-size:13px;line-height:1.35">{{ l }}</div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:22px;font-weight:700;letter-spacing:-0.5px">Repeated songs</div>
+            <div style="height:30px;min-width:30px;padding:0 10px;box-sizing:border-box;border-radius:15px;background:#111;color:#9d8cf2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">{{ repCount }}</div>
+          </div>
+          <div style="display:flex;border:1.5px solid #111;border-radius:19px;overflow:hidden;align-self:flex-start">
+            <sc-for list="{{ repOpts }}" as="o" hint-placeholder-count="2">
+              <button onClick="{{ o.pick }}" style="height:35px;padding:0 16px;border:none;background:{{ o.bg }};color:{{ o.ink }};font-size:13px;font-weight:500;cursor:pointer">{{ o.label }}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ repNone }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:14px;color:#2a1f6b">No repeats found.</div>
+          </sc-if>
+          <sc-for list="{{ repeats }}" as="r" hint-placeholder-count="4">
+            <div style="border:1.5px solid #111;border-radius:22px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;gap:10px">
+                <div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+                  <div style="font-size:15px;font-weight:700">{{ r.title }}</div>
+                  <div style="font-size:12px;color:#2a1f6b">{{ r.artist }}</div>
+                </div>
+                <div style="font-size:13px;font-weight:700;flex-shrink:0">{{ r.bpm }}</div>
+              </div>
+              <div style="font-size:12px;font-weight:700">{{ r.note }}</div>
+              <sc-for list="{{ r.alts }}" as="a" hint-placeholder-count="0">
+                <div style="font-size:12px;color:#2a1f6b;line-height:1.3"><span style="font-weight:700;color:#111">{{ a.who }}</span> · {{ a.title }}</div>
+              </sc-for>
+              <div style="display:flex;flex-wrap:wrap;gap:4px">
+                <sc-for list="{{ r.tags }}" as="g" hint-placeholder-count="2">
+                  <div style="height:24px;padding:0 10px;border-radius:12px;border:1.5px solid #111;background:{{ g.bg }};color:{{ g.ink }};font-size:11px;font-weight:700;display:flex;align-items:center">{{ g.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;left:20px;right:20px;top:58px;z-index:6;background:#111;color:#fff;border-radius:22px;padding:14px 18px;font-size:14px;font-weight:500">{{ toast }}</div>
+    </sc-if>
+
+    <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:50%;bottom:26px;transform:translateX(-50%);display:flex;gap:4px;padding:5px;border-radius:30px;background:#111;z-index:4">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="3">
+        <button onClick="{{ n.pick }}" style="height:46px;padding:0 20px;border-radius:23px;border:none;background:{{ n.bg }};color:{{ n.ink }};font-size:15px;font-weight:500;cursor:pointer">{{ n.label }}</button>
+      </sc-for>
+    </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;start&quot;,&quot;create&quot;,&quot;created&quot;,&quot;join&quot;,&quot;saved&quot;,&quot;app&quot;],&quot;default&quot;:&quot;start&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showLogo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;startLoaded&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;bpmDropWarn&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:5,&quot;min&quot;:0,&quot;max&quot;:30,&quot;tsType&quot;:&quot;number&quot;,&quot;unit&quot;:&quot;BPM&quot;}}">
+const mk = a => a.map(([title, artist, bpm, key, time, energy]) => ({ raw:title, title: cleanTitle(title), artist, bpm, key, time, energy, sec: toSec(time) }));
+function toSec(t){ const p=(t||'').split(':').map(Number); return p.length===2?p[0]*60+p[1]:(p.length===3?p[0]*3600+p[1]*60+p[2]:0); }
+const norm = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+const GENERIC=/\b(original|extended|club|radio|clean|dirty|explicit|intro|outro|mix|version|vip|hype|mixed|edit)\b/g;
+function cleanTitle(s){ let t=(s||'');
+  t=t.replace(/\[[^\]]*\]/g,' ').replace(/#\S+(\s+vip\b)?/gi,' ').replace(/\S+\.(com|net|org|io)\S*/gi,' ');
+  t=t.replace(/^\s*\d{2,3}\s*-\s*/,'').replace(/\s+\d{2,3}\s*$/,'');
+  t=t.replace(/\(\s*\)/g,'').replace(/\s{2,}/g,' ').replace(/[\s\-–]+$/,'').trim();
+  return t||(s||'').trim(); }
+const artToks=a=>(a||'').split(/[\/,&]|\sx\s|\bfeat\.?|\bft\.?|\bvs\.?/i).map(norm).filter(x=>x.length>=3);
+function songInfo(t){ let s=cleanTitle(t.title).replace(/\brmx\b/gi,'remix'); const arts=artToks(t.artist);
+  let ver=[]; s=s.replace(/[\(\[]([^\)\]]*)[\)\]]/g,(m,x)=>{ver.push(x);return ' ';});
+  s=s.replace(/\s(feat\.?|ft\.?)\s.*$/i,'');
+  const parts=s.split(/\s[-–]\s/);
+  if(parts.length>1){ const A=norm(parts[0]), B=parts.slice(1).join(' ');
+    if(arts.some(x=>A.includes(x)||x.includes(A))) { s=B; arts.push(A); }
+    else if(arts.some(x=>norm(B).includes(x))||/remix|mix|edit|rework/i.test(B)) { ver.push(B); s=parts[0]; }
+    else if(A.length<=20&&parts.length===2) { arts.push(A); s=B; } }
+  const lower=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const base=norm(lower(s).replace(GENERIC,' '));
+  const v=norm(ver.map(x=>lower(x).replace(/\brmx\b/g,'remix').replace(GENERIC,' ')).join(' '));
+  return {base:base||norm(s),ver:v,arts}; }
+function lev(a,b){ if(Math.abs(a.length-b.length)>2) return 9; const d=Array.from({length:a.length+1},(_,i)=>[i]); for(let j=1;j<=b.length;j++) d[0][j]=j;
+  for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[a.length][b.length]; }
+function sameSong(x,y){ if(x.base.length<3||y.base.length<3) return false;
+  const close = x.base===y.base || (x.base.length>=8 && lev(x.base,y.base)<=2);
+  if(!close) return false; const art = x.arts.some(a=>y.arts.some(b=>a.includes(b)||b.includes(a)));
+  return art || x.base.length>=8; }
+function groupTracks(items){ const gs=[]; items.forEach(it=>{ it.info=songInfo(it.t); const g=gs.find(g=>sameSong(g.m[0].info,it.info)); if(g) g.m.push(it); else gs.push({m:[it]}); }); return gs; }
+
+const SOL = mk([
+ ['Cumbia del Sol','Ela Rivera',96,'8A','04:40',4],['Lento','Mareo',98,'3A','05:12',5],['Agua de Coco','Brisa',100,'6A','04:22',5],
+ ['Nick Leon - Apretao (Kelman Duran Rmx) [Clean]','Nick Leon',102,'4A','04:06',4],['Selva Baja','Tropikal Unit',104,'2A','05:30',5],
+ ['Bachetron (Original Mix)','Nick León',106,'5B','03:58',6],['El Tebeo','Surtek Collective/Peter Rap',110,'7A','06:53',6],
+ ['Marea','Nina Flor',112,'9A','04:48',6],['Calor','Los Ritmos',116,'10A','03:55',6],['Sube','DJ Pampa',118,'11A','04:10',7],
+ ['Conejo y Luna','Rosa Pistola',125,'7A','04:13',6]]);
+const PERRO = mk([
+ ['Fuego Lento','Cali Noise',146,'2A','04:05',7],['Latin Ecstasy Club [145] [6A]','Peterblue',145,'6A','03:22',7],['Guaracha Total','Kombo 3000',148,'8A','03:40',7],
+ ['Tiroteo (Extended Mix)','Daniela Lalita, Mura Masa',150,'7A','02:17',7],['SUSUSUSU (Original Mix)','Susobrino',150,'12A','04:40',7],
+ ['Dembow Infierno','Ruido Blanco',152,'9A','03:10',8],['Tribal Neón','Zeta',155,'4A','03:35',8],['Selva Digital','Ácido Sur',158,'6A','03:44',7],
+ ['Motif Mambo','Daniel Pineda',160,'4A','03:27',6],['Salomelody - Gata','Salomelody',160.97,'3A','04:13',6],
+ ['Mambo 160','La Fiera',160,'5A','03:02',8],['Perreo Hardcore','DJ Trueno',165,'1A','02:58',8],['Final Feliz','Los Ritmos',170,'11B','03:20',8]]);
+const SW = ['#111111','#ffffff','#3b2b94','#d9d1ff'];
+const SWI = ['#9d8cf2','#111111','#ffffff','#111111'];
+const fmtDur = s => { const h=Math.floor(s/3600), m=Math.round((s%3600)/60); return h? h+'h '+m+'m' : m+'m'; };
+const fmtB = b => (Math.round(b*10)/10).toString().replace(/\.0$/,'');
+
+class Component extends DCLogic {
+  state = { flow:'start', evName:'Latin Club', evDate:'Sat 14 Nov', human:false, djName:'', joinPicked:false,
+    slots:['22:00','23:30','01:30','03:00'], tab:'event', view:'me', sort:'order', rep:'lineup', toast:null,
+    order:['sol','me','perro','kaira'],
+    djs:{ sol:{name:'SOL MONTES',time:'22:00',tracks:SOL}, me:{name:'YOU',time:'23:30',tracks:null,me:true},
+          perro:{name:'PERRO SALVAJE',time:'01:30',tracks:PERRO}, kaira:{name:'KAIRA',time:'03:00',tracks:null} } };
+  fileRef = React.createRef();
+
+  componentDidMount(){ if(this.props.startLoaded) this.loadSample(); const f=this.props.startScreen; if(f&&f!=='start') this.setState({flow:f==='app'?null:f}); }
+  copy(t,msg){ try{navigator.clipboard.writeText('https://'+t);}catch(e){} this.flash(msg); }
+  flowVals(){
+    const S=this.state, ADMIN='aline.app/e/k7f3q/admin#a9xR2vQ7mLp4', INV='aline.app/e/k7f3q/join#t2mW8sKd3', ME='aline.app/e/k7f3q/me#d8pZ5nHq1';
+    const myName=(S.djs.me.name||'').trim();
+    const joinSlots=S.order.map((id,i)=>{ const d=S.djs[id]; const taken=!!d.tracks&&!d.me; const sel=id==='me'&&S.joinPicked;
+      return { time:S.slots[i]||d.time, label: taken?d.name:(sel?(S.djName.trim()||'You'):'Open slot'), note: taken?'Taken':(sel?'Your slot':''),
+        bg: sel?'#111':'transparent', ink: sel?'#9d8cf2':'#111', op: taken?0.45:1,
+        pick:()=>{ if(taken) return; this.setState(s=>{ const o=[...s.order]; const a=o.indexOf('me'); [o[a],o[i]]=[o[i],o[a]]; return {order:o,joinPicked:true}; }); } }; });
+    const joinReady=S.joinPicked&&S.djName.trim()&&S.djs.me.tracks;
+    return {
+      isStart:S.flow==='start', isCreate:S.flow==='create', isCreated:S.flow==='created', isJoin:S.flow==='join', isSaved:S.flow==='saved', isApp:!S.flow,
+      goStart:()=>this.setState({flow:'start'}), goCreate:()=>this.setState({flow:'create'}), goJoin:()=>this.setState({flow:'join'}), goApp:()=>this.setState({flow:null,tab:'event'}),
+      evName:S.evName, evDate:S.evDate, slotCount:S.slots.length,
+      setEvName:e=>this.setState({evName:e.target.value}), setEvDate:e=>this.setState({evDate:e.target.value}),
+      slotRows:S.slots.map((t,i)=>({time:t,n:i+1,set:e=>{const v=e.target.value;this.setState(s=>{const a=[...s.slots];a[i]=v;return{slots:a};});},
+        remove:()=>this.setState(s=>s.slots.length>1?{slots:s.slots.filter((_,j)=>j!==i)}:null)})),
+      addSlot:()=>this.setState(s=>({slots:[...s.slots,'']})),
+      toggleHuman:()=>this.setState(s=>({human:!s.human})), humanBg:S.human?'#111':'transparent',
+      createOp:S.human&&S.evName.trim()?1:0.45,
+      createEvent:()=>{ if(!S.human){this.flash('Tick the human check first');return;} if(!S.evName.trim())return; this.setState({flow:'created'}); },
+      adminLink:ADMIN, inviteLink:INV, meLink:ME,
+      shareInvite:()=>{ if(navigator.share) navigator.share({title:'Join '+S.evName+' on aline',url:'https://'+INV}).catch(()=>{}); else this.copy(INV,'Invite link copied'); },
+      copyAdmin:()=>this.copy(ADMIN,'Admin link copied'), copyInvite:()=>this.copy(INV,'Invite link copied'), copyMe:()=>this.copy(ME,'Personal link copied'),
+      shareMe:()=>{ if(navigator.share) navigator.share({title:'My aline link',url:'https://'+ME}).catch(()=>{}); else this.copy(ME,'Personal link copied'); },
+      joinSlots, djName:S.djName, setDjName:e=>this.setState({djName:e.target.value}), joinOp:joinReady?1:0.45,
+      myCount:(S.djs.me.tracks||[]).length, myName:myName||'DJ',
+      joinLineup:()=>{ if(!joinReady){ this.flash(!S.joinPicked?'Pick a slot':!S.djName.trim()?'Add your DJ name':'Add your rekordbox set'); return; }
+        this.setState(s=>({flow:'saved',djs:{...s.djs,me:{...s.djs.me,name:s.djName.trim().toUpperCase()}}})); }
+    };
+  }
+  flash(t){ clearTimeout(this._t); this.setState({toast:t}); this._t=setTimeout(()=>this.setState({toast:null}),2200); }
+  decode(buf){ const b=new Uint8Array(buf); let enc='utf-8';
+    if(b[0]===0xFF&&b[1]===0xFE) enc='utf-16le'; else if(b[0]===0xFE&&b[1]===0xFF) enc='utf-16be'; else if(b.length>3&&b[1]===0&&b[3]===0) enc='utf-16le';
+    return new TextDecoder(enc).decode(buf).replace(/^\uFEFF/,''); }
+  parse(text){
+    const lines=text.split(/\r?\n/).filter(l=>l.trim()); if(!lines.length) return [];
+    const head=lines[0].split('\t').map(s=>s.trim().toLowerCase()); const ix=n=>head.indexOf(n);
+    const iT=ix('track title'),iB=ix('bpm'),iK=ix('key'),iA=ix('artist'),iTm=ix('time'),iG=ix('genre');
+    if(iT<0) return [];
+    return lines.slice(1).map(l=>{ const c=l.split('\t'); let t=(c[iT]||'').trim(), e=null;
+      const m=t.match(/^(.*)\s-\s(\d{1,2})$/); if(m){t=m[1].trim();e=+m[2];}
+      const time=(c[iTm]||'').trim();
+      return {raw:t,title:cleanTitle(t),artist:(c[iA]||'').trim(),bpm:parseFloat(c[iB])||0,key:(c[iK]||'').trim(),time,sec:toSec(time),genre:(c[iG]||'').trim(),energy:e};
+    }).filter(r=>r.title);
+  }
+  setMine(tracks,name){
+    if(!tracks.length){ this.flash('Could not read that file. Export a .txt playlist from rekordbox.'); return; }
+    this.setState(s=>({djs:{...s.djs,me:{...s.djs.me,tracks,file:name}},view:'me',tab:s.flow?s.tab:'set'}));
+    const cl=tracks.filter(t=>t.raw!==t.title).length; this.flash(tracks.length+' tracks imported'+(cl?' · '+cl+' titles cleaned':''));
+  }
+  loadSample = async () => {
+    try{ const r=await fetch(encodeURI('uploads/Latin Club.txt')); const buf=await r.arrayBuffer(); this.setMine(this.parse(this.decode(buf)),'Latin Club.txt'); }
+    catch(e){ this.flash('Sample file not found'); }
+  };
+  onFile = e => { const f=e.target.files&&e.target.files[0]; if(!f) return;
+    f.arrayBuffer().then(buf=>this.setMine(this.parse(this.decode(buf)),f.name)); e.target.value=''; };
+  move(id,dir){ this.setState(s=>{ const o=[...s.order]; const i=o.indexOf(id), j=i+dir; if(j<0||j>=o.length) return null; [o[i],o[j]]=[o[j],o[i]]; return {order:o}; }); }
+
+  stat(tr){ const b=tr.map(t=>t.bpm).filter(Boolean); const sum=b.reduce((a,x)=>a+x,0);
+    return {n:tr.length,dur:tr.reduce((a,t)=>a+t.sec,0),avg:b.length?sum/b.length:0,min:b.length?Math.min(...b):0,max:b.length?Math.max(...b):0}; }
+
+  renderVals(){
+    const S=this.state, warn=this.props.bpmDropWarn ?? 5;
+    const ids=S.order, loaded=ids.filter(id=>S.djs[id].tracks);
+    const color={}; ids.forEach((id,i)=>{color[id]=i;});
+    // cross-lineup index
+    const items=[]; loaded.forEach(id=>S.djs[id].tracks.forEach((t,i)=>items.push({id,i,t})));
+    const groups=groupTracks(items); const gOf=new Map(); groups.forEach(g=>g.m.forEach(x=>gOf.set(x.t,{g,x})));
+    const lineupReps=groups.filter(g=>new Set(g.m.map(x=>x.id)).size>1);
+
+    const lineup=ids.map((id,i)=>{ const d=S.djs[id]; const st=d.tracks?this.stat(d.tracks):null;
+      return { name:d.name, time:S.slots[i]||d.time, pos:i+1, swatch:SW[i],
+        status: st? st.n+' tracks · '+Math.round(st.avg)+' avg BPM · '+fmtDur(st.dur) : (d.me?'Your set — not imported':'Invited · waiting for set'),
+        short: st? Math.round(st.min)+'–'+Math.round(st.max)+' BPM · '+st.n+' tracks' : 'No set yet',
+        cardBg: d.me?'#111':'transparent', cardInk: d.me?'#fff':'#111',
+        needsImport: d.me&&!d.tracks, pending: !d.me&&!d.tracks,
+        up:()=>this.move(id,-1), down:()=>this.move(id,1), upOp:i===0?0.3:1, downOp:i===ids.length-1?0.3:1 }; });
+
+    // set view
+    const vId=S.djs[S.view]?S.view:'me', v=S.djs[vId], vt=v.tracks||[];
+    const vs=this.stat(vt);
+    const H=b=>Math.max(4,Math.min(100,(b-70)/(185-70)*100))+'%';
+    const setBars=vt.map(t=>({h:H(t.bpm),bg:'#9d8cf2',tip:fmtB(t.bpm)+' · '+t.title}));
+    const kc={}; vt.forEach(t=>{ if(t.key) kc[t.key]=(kc[t.key]||0)+1; });
+    const topKeys=Object.entries(kc).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([key,n])=>({key,n}));
+    let rows=vt.map((t,i)=>({...t,i}));
+    if(S.sort==='bpm') rows.sort((a,b)=>a.bpm-b.bpm);
+    const trackRows=rows.map(t=>{ const e=gOf.get(vt[t.i]); let dup=null;
+      if(e){ const oth=e.g.m.filter(x=>x.id!==vId); const ids2=[...new Set(oth.map(x=>x.id))];
+        if(ids2.length){ const sameV=oth.every(x=>x.info.ver===e.x.info.ver); dup=(sameV?'Also in ':'Other version in ')+ids2.map(x=>S.djs[x].name).join(', '); }
+        else if(e.g.m.length>1) dup='Also in this set'; }
+      return {n:t.i+1,title:t.title,artist:t.artist||'—',bpm:fmtB(t.bpm),key:t.key||'—',dup}; });
+    const avgE=vt.filter(t=>t.energy).reduce((a,t,_,arr)=>a+t.energy/arr.length,0);
+    const stats=[{v:vs.n,l:'Tracks'},{v:fmtDur(vs.dur),l:'Total length'},{v:Math.round(vs.avg),l:'Average BPM'},{v:avgE?avgE.toFixed(1):'—',l:'Average energy'}];
+
+    // flow
+    let flowBars=[], flowSegs=[];
+    loaded.forEach(id=>{ const i=color[id], d=S.djs[id];
+      d.tracks.forEach(t=>flowBars.push({h:H(t.bpm),bg:SW[i]==='#111111'?'#5a4bb8':SW[i],tip:d.name+' · '+fmtB(t.bpm)+' · '+t.title}));
+      flowSegs.push({flex:d.tracks.length,bg:SW[i]==='#111111'?'#5a4bb8':SW[i],ink:SWI[i]==='#9d8cf2'?'#fff':SWI[i],name:d.name,avg:Math.round(this.stat(d.tracks).avg)}); });
+    const all=loaded.flatMap(id=>S.djs[id].tracks.map(t=>t.bpm)).filter(Boolean);
+    const flowRange=all.length? Math.round(Math.min(...all))+'–'+Math.round(Math.max(...all)) : '—';
+    const drops=[]; for(let i=1;i<loaded.length;i++){ const a=this.stat(S.djs[loaded[i-1]].tracks).avg, b=this.stat(S.djs[loaded[i]].tracks).avg;
+      if(a-b>warn) drops.push('Average BPM drops '+Math.round(a-b)+' from '+S.djs[loaded[i-1]].name+' ('+Math.round(a)+') to '+S.djs[loaded[i]].name+' ('+Math.round(b)+').'); }
+    const pend=ids.filter(id=>!S.djs[id].tracks).map(id=>S.djs[id].name);
+    const checkLines=[...(drops.length?drops:['Average BPM rises from each DJ to the next.']), ...(pend.length?['Waiting on: '+pend.join(', ')+'.']:[])];
+
+    // repeats
+    let repeats;
+    const mkRep=(g,tags)=>{ const vers=new Set(g.m.map(x=>x.info.ver)); const names=new Set(g.m.map(x=>x.t.title.toLowerCase()));
+      const t0=g.m[0].t; const same=vers.size===1;
+      return {title:t0.title,artist:t0.artist,bpm:fmtB(t0.bpm)+' BPM',tags,
+        note: same?(names.size>1?'Same track, saved under different names':'Same track'):'Same song, different versions',
+        alts: names.size>1? g.m.map(x=>({who:(x.id&&S.djs[x.id]?S.djs[x.id].name:'#'+(x.i+1)),title:x.t.title})) : []}; };
+    if(S.rep==='lineup'){
+      repeats=lineupReps.map(g=>{ const by=ids.filter(id=>g.m.some(x=>x.id===id)); const pos=id=>g.m.find(x=>x.id===id).i+1;
+        return mkRep(g, by.map((id,j)=>({label:(j===0?'First: ':'')+S.djs[id].name+' #'+pos(id),bg:j===0?'#111':'transparent',ink:j===0?'#9d8cf2':'#111'}))); });
+    } else {
+      const own=groupTracks((S.djs.me.tracks||[]).map((t,i)=>({id:null,i,t})));
+      repeats=own.filter(g=>g.m.length>1).map(g=>{ const r=mkRep(g,g.m.map(x=>({label:'Track #'+(x.i+1),bg:'transparent',ink:'#111'}))); r.alts=r.alts.length?g.m.map(x=>({who:'#'+(x.i+1),title:x.t.title})):[]; return r; });
+    }
+    const seg=(cur,val)=>({bg:cur===val?'#111':'transparent',ink:cur===val?'#9d8cf2':'#111'});
+    const hasMySet=!!S.djs.me.tracks;
+    return {
+      ...this.flowVals(),
+      showLogo:this.props.showLogo ?? true,
+      isEvent:S.tab==='event', isSet:S.tab==='set', isLineup:S.tab==='lineup',
+      fileRef:this.fileRef, onFile:this.onFile, loadSample:this.loadSample,
+      pickFile:()=>this.fileRef.current&&this.fileRef.current.click(),
+      invite:()=>{ try{navigator.clipboard.writeText('https://aline.app/latin-club/join');}catch(e){} this.flash('Invite link copied — send it to the lineup'); },
+      remind:()=>this.flash('Reminder sent to KAIRA'),
+      goSet:()=>this.setState({tab:'set',view:'me'}), goLineup:()=>this.setState({tab:'lineup'}),
+      lineup, noMySet:!hasMySet, hasMySet, fileName:S.djs.me.file||'',
+      lineupRepeatCount:lineupReps.length,
+      viewChips:ids.map(id=>({name:S.djs[id].name,...seg(vId,id),pick:()=>this.setState({view:id})})),
+      viewEmpty:!vt.length&&vId==='me', viewLoaded:vt.length>0,
+      stats, setBars, topKeys, bpmRange:vt.length?Math.round(vs.min)+'–'+Math.round(vs.max)+' BPM':'',
+      sortOpts:[['order','Set order'],['bpm','BPM']].map(([k,label])=>({label,...seg(S.sort,k),pick:()=>this.setState({sort:k})})),
+      trackRows,
+      flowBars, flowSegs, flowRange,
+      checkTitle: drops.length?'Order check: BPM drop':'Order check: looks good',
+      checkBg: drops.length?'#111':'transparent', checkInk: drops.length?'#fff':'#111', checkLines,
+      repOpts:[['lineup','Across lineup'],['self','Within my set']].map(([k,label])=>({label,...seg(S.rep,k),pick:()=>this.setState({rep:k})})),
+      repeats, repCount:repeats.length, repNone:!repeats.length,
+      toast:S.toast,
+      navItems:[['event','Event'],['set','Set'],['lineup','Lineup']].map(([k,label])=>({label,bg:S.tab===k?'#9d8cf2':'transparent',ink:S.tab===k?'#111':'#fff',pick:()=>this.setState({tab:k})}))
+    };
+  }
+}
+</script>
+</body>
+</html>
