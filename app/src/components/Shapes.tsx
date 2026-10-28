@@ -10,26 +10,3 @@ export function Shapes({ size, ring = 2, color }: { size: number; ring?: number;
   );
 }
 
-export function Logos() {
-  return (
-    <div className="logos">
-      <div className="badge">
-        <div className="badge-word">aline</div>
-        <div className="badge-tag">
-          Same night,
-          <br />
-          no repeats
-        </div>
-        <Shapes size={52} ring={3} />
-      </div>
-      <div className="chip-logo">
-        <div className="chip-logo-word">aline</div>
-        <div className="chip-logo-tag">
-          Lineup
-          <br />
-          set planner
-        </div>
-      </div>
-    </div>
-  );
-}

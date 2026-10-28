@@ -49,14 +49,16 @@ export function Create() {
     <>
       <BackButton />
       <div className="h1">New event</div>
-      <label className="col g6">
-        <span className="label">Event name</span>
-        <input className="field" value={S.evName} onChange={(e) => set({ evName: e.target.value })} />
-      </label>
-      <label className="col g6">
-        <span className="label">Date</span>
-        <input className="field" value={S.evDate} onChange={(e) => set({ evDate: e.target.value })} />
-      </label>
+      <div className="field-pair">
+        <label className="col g6">
+          <span className="label">Event name</span>
+          <input className="field" value={S.evName} onChange={(e) => set({ evName: e.target.value })} />
+        </label>
+        <label className="col g6">
+          <span className="label">Date</span>
+          <input className="field" value={S.evDate} onChange={(e) => set({ evDate: e.target.value })} />
+        </label>
+      </div>
       <div className="col g8">
         <div className="label">Slots</div>
         {S.slots.map((t, i) => (
@@ -87,8 +89,8 @@ export function Create() {
       {/* Stand-in for Cloudflare Turnstile. */}
       <button className="human" onClick={() => set((s) => ({ human: !s.human }))} aria-pressed={S.human}>
         <div className={`human-dot${S.human ? ' on' : ''}`} />
-        <div style={{ flex: 1, fontSize: 14 }}>I’m human</div>
-        <div style={{ fontSize: 11, color: 'var(--ink-soft)' }}>Cloudflare Turnstile</div>
+        <div className="human-label">I’m human</div>
+        <div className="human-note">Cloudflare Turnstile</div>
       </button>
       <button className={`btn-primary${ready ? '' : ' dim'}`} onClick={create}>
         Create event
@@ -98,7 +100,7 @@ export function Create() {
 }
 
 export function Created() {
-  const { state: S, set, share } = useApp();
+  const { state: S, set, share, web } = useApp();
   return (
     <>
       <div className="dot72" />
@@ -109,7 +111,7 @@ export function Created() {
         </div>
       </div>
       <div className="body">Send the invite to your DJs. Anyone with it can pick an open slot and add their set.</div>
-      <div className="col g8">
+      <div className="btn-stack">
         <button className="btn-primary" onClick={() => share(`Join ${S.evName} on aline`, INVITE_LINK, 'Invite link copied')}>
           Share invite
         </button>
@@ -117,7 +119,7 @@ export function Created() {
           Open event
         </button>
       </div>
-      <div className="small">You’re the organiser on this phone.</div>
+      <div className="small">You’re the organiser on this {web ? 'browser' : 'phone'}.</div>
     </>
   );
 }
@@ -138,7 +140,7 @@ export function Join() {
         <div className="h1-xl">{S.evName}</div>
         <div className="sub">{S.evDate} · pick your slot</div>
       </div>
-      <div className="col g8">
+      <div className="join-slots">
         {S.order.map((id, i) => {
           const d = S.djs[id];
           const taken = !!d.tracks && !d.me;
@@ -195,25 +197,25 @@ export function Join() {
 }
 
 export function Saved() {
-  const { state: S, set, share } = useApp();
+  const { state: S, set, share, web } = useApp();
   return (
     <>
-      <div className="shapes" style={{ paddingTop: 12 }}>
+      <div className="shapes saved-shapes">
         <div className="dot72" />
         <div className="ring72" />
       </div>
-      <div className="col g8">
+      <div className="col g8 saved-text">
         <div className="h1">You’re in, {S.djs.me.name.trim() || 'DJ'}</div>
         <div className="body" style={{ maxWidth: 'none' }}>
-          This phone remembers you. Come back any time to update your set.
+          This {web ? 'browser' : 'phone'} remembers you. Come back any time to update your set.
         </div>
       </div>
-      <div className="col g8">
+      <div className="col g8 saved-actions">
         <button className="btn-primary" onClick={() => set({ flow: null, tab: 'event' })}>
           Go to {S.evName}
         </button>
         <button className="btn-link" onClick={() => share('My aline link', ME_LINK, 'Personal link copied')}>
-          Using another phone? Send yourself a link
+          Using another {web ? 'device' : 'phone'}? Send yourself a link
         </button>
       </div>
     </>

@@ -22,12 +22,11 @@ export interface AppState {
   djs: Record<DjId, Dj>;
 }
 
-/** Prototype settings, overridable from the URL: ?screen=app&loaded=1&logo=0&drop=5 */
+/** Prototype settings, overridable from the URL: ?screen=app&loaded=1&drop=5 */
 const params = new URLSearchParams(window.location.search);
 const SCREENS = ['start', 'create', 'created', 'join', 'saved', 'app'];
 export const config = {
   startScreen: SCREENS.includes(params.get('screen') || '') ? params.get('screen')! : 'start',
-  showLogo: params.get('logo') !== '0',
   startLoaded: params.get('loaded') === '1',
   bpmDropWarn: Number(params.get('drop') ?? 5) || 0,
 };
@@ -139,7 +138,22 @@ function useAppState() {
     if (config.startLoaded) loadSample();
   }, [loadSample]);
 
-  return { state, set, toast, flash, fileRef, onFile, pickFile, loadSample, move, share };
+  const web = useDesktop();
+
+  return { state, set, toast, flash, fileRef, onFile, pickFile, loadSample, move, share, web };
+}
+
+/** Wide screens get the web layout; phones and narrow windows get the phone layout. */
+const DESKTOP = '(min-width: 900px)';
+function useDesktop() {
+  const [match, setMatch] = useState(() => window.matchMedia(DESKTOP).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(DESKTOP);
+    const on = () => setMatch(mq.matches);
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return match;
 }
 
 type Ctx = ReturnType<typeof useAppState>;

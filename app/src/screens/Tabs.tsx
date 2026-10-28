@@ -3,7 +3,8 @@ import { flowView, lineupIndex, lineupRows, repeatsView, setView, type Bar } fro
 import { INVITE_LINK } from '../lib/demo';
 import { config, useApp } from '../state';
 
-function Bars({ bars, height }: { bars: Bar[]; height: number }) {
+/** Bar chart; without `height` it fills its container (sized in CSS). */
+export function Bars({ bars, height }: { bars: Bar[]; height?: number }) {
   return (
     <div className="bars" style={{ height }}>
       {bars.map((b, i) => (
@@ -13,7 +14,7 @@ function Bars({ bars, height }: { bars: Bar[]; height: number }) {
   );
 }
 
-function Segmented<K extends string>({ opts, value, onPick, large }: { opts: [K, string][]; value: K; onPick: (k: K) => void; large?: boolean }) {
+export function Segmented<K extends string>({ opts, value, onPick, large }: { opts: [K, string][]; value: K; onPick: (k: K) => void; large?: boolean }) {
   return (
     <div className={`seg${large ? ' lg' : ''}`} role="group">
       {opts.map(([k, label]) => (
@@ -25,7 +26,7 @@ function Segmented<K extends string>({ opts, value, onPick, large }: { opts: [K,
   );
 }
 
-function useIndex() {
+export function useIndex() {
   const { state: S } = useApp();
   return useMemo(() => lineupIndex(S), [S.order, S.djs]); // eslint-disable-line react-hooks/exhaustive-deps
 }
