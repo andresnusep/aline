@@ -32,11 +32,11 @@ Prototype settings are URL parameters:
 
 ## Deploy (Cloudflare Workers via GitHub)
 
-Deployed as a Worker with static assets, configured in `wrangler.jsonc`: `wrangler deploy` runs
-`npm run build` and uploads `dist/`. In the Worker's Settings → Build:
+Deployed as a Worker with static assets, configured in `wrangler.jsonc` at the repo root:
+`wrangler deploy` installs and builds `app/` and uploads `app/dist`. In the Worker's Settings → Build:
 
-- Root directory: `app`
-- Build command: `npm run build` (or empty — wrangler builds anyway)
+- Root directory: `/`
+- Build command: none
 - Deploy command: `npx wrangler deploy`
 
 Every push to `main` redeploys.

@@ -1,0 +1,14 @@
+// Cloudflare Workers static-assets deploy for the aline app in app/.
+// Workers Builds runs `npx wrangler deploy` from the repo root, which runs the build below
+// and uploads app/dist.
+{
+  "name": "aline",
+  "compatibility_date": "2026-10-01",
+  "build": {
+    "command": "cd app && npm ci && npm run build"
+  },
+  "assets": {
+    "directory": "./app/dist",
+    "not_found_handling": "single-page-application"
+  }
+}
