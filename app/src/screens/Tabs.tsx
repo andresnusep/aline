@@ -38,13 +38,14 @@ export function EventTab() {
   const rows = lineupRows(S);
   const flow = flowView(S, idx, config.bpmDropWarn);
   const me = S.djs.me;
+  const invite = () => share(`Join ${S.evName} on aline`, INVITE_LINK, 'Invite link copied — send it to the lineup');
   return (
     <>
       <div className="topbar">
         <button className="wordmark-btn" onClick={() => set({ flow: 'start' })} aria-label="aline home">
           <Logo />
         </button>
-        <button className="btn-pill" onClick={() => share(`Join ${S.evName} on aline`, INVITE_LINK, 'Invite link copied — send it to the lineup')}>
+        <button className="btn-pill" onClick={invite}>
           Invite DJs
         </button>
       </div>
@@ -57,7 +58,7 @@ export function EventTab() {
       <div className="col g12">
         <div className="h2">Lineup</div>
         {rows.map((d) => (
-          <div key={d.id} className={`dj-card${d.me ? ' me' : ''}`}>
+          <div key={d.id} className={`dj-card${d.me ? ' me' : ''}${d.open ? ' open' : ''}`}>
             <div className="time-ring">{d.time}</div>
             <div className="grow col" style={{ gap: 3 }}>
               <div className="dj-card-name">{d.name}</div>
@@ -71,6 +72,11 @@ export function EventTab() {
             {d.pending && (
               <button className="btn-pill sm" onClick={() => flash(`Reminder sent to ${d.name}`)}>
                 Remind
+              </button>
+            )}
+            {d.open && (
+              <button className="btn-pill sm" onClick={invite}>
+                Invite
               </button>
             )}
           </div>

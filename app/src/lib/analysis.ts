@@ -7,6 +7,8 @@ export interface Dj {
   time: string;
   tracks: Track[] | null;
   me?: boolean;
+  /** A slot in a new event that no DJ has taken yet. */
+  open?: boolean;
   file?: string;
 }
 
@@ -72,10 +74,13 @@ export function lineupRows(S: LineupState) {
         ? `${st.n} tracks · ${Math.round(st.avg)} avg BPM · ${fmtDur(st.dur)}`
         : d.me
           ? 'Your set — not imported'
-          : 'Invited · waiting for set',
-      short: st ? `${Math.round(st.min)}–${Math.round(st.max)} BPM · ${st.n} tracks` : 'No set yet',
+          : d.open
+            ? 'Open · send the invite'
+            : 'Invited · waiting for set',
+      short: st ? `${Math.round(st.min)}–${Math.round(st.max)} BPM · ${st.n} tracks` : d.open ? 'Send the invite' : 'No set yet',
       needsImport: !!d.me && !d.tracks,
-      pending: !d.me && !d.tracks,
+      pending: !d.me && !d.open && !d.tracks,
+      open: !!d.open,
       first: i === 0,
       last: i === S.order.length - 1,
     };
@@ -146,10 +151,12 @@ export function flowView(S: LineupState, idx: LineupIndex, bpmDropWarn: number) 
     if (a - b > bpmDropWarn)
       drops.push(`Average BPM drops ${Math.round(a - b)} from ${A.name} (${Math.round(a)}) to ${B.name} (${Math.round(b)}).`);
   }
-  const pending = S.order.filter((id) => !S.djs[id].tracks).map((id) => S.djs[id].name);
+  const pending = S.order.filter((id) => !S.djs[id].tracks && !S.djs[id].open).map((id) => S.djs[id].name);
+  const open = S.order.filter((id) => S.djs[id].open).length;
   const checkLines = [
     ...(drops.length ? drops : ['Average BPM rises from each DJ to the next.']),
     ...(pending.length ? [`Waiting on: ${pending.join(', ')}.`] : []),
+    ...(open ? [`${open} open slot${open > 1 ? 's' : ''}.`] : []),
   ];
   return { bars, segs, range, hasDrop: drops.length > 0, checkLines };
 }

@@ -60,7 +60,7 @@ export function WebStart() {
 }
 
 export function WebEvent() {
-  const { state: S, set, flash, move, pickFile, loadSample } = useApp();
+  const { state: S, set, flash, move, pickFile, loadSample, share } = useApp();
   const idx = useIndex();
   const rows = lineupRows(S);
   const flow = flowView(S, idx, config.bpmDropWarn);
@@ -108,7 +108,7 @@ export function WebEvent() {
         <section className="w-card w-order">
           <div className="h2">Play order</div>
           {rows.map((d) => (
-            <div key={d.id} className={`w-dj${d.me ? ' me' : ''}`}>
+            <div key={d.id} className={`w-dj${d.me ? ' me' : ''}${d.open ? ' open' : ''}`}>
               <div className="time-ring">{d.time}</div>
               <div className="w-dj-dot" style={{ background: d.swatch }} />
               <div className="grow col" style={{ gap: 2 }}>
@@ -123,6 +123,11 @@ export function WebEvent() {
               {d.pending && (
                 <button className="btn-pill sm" onClick={() => flash(`Reminder sent to ${d.name}`)}>
                   Remind
+                </button>
+              )}
+              {d.open && (
+                <button className="btn-pill sm" onClick={() => share(`Join ${S.evName} on aline`, INVITE_LINK, 'Invite link copied')}>
+                  Invite
                 </button>
               )}
               <button className="w-arrow" disabled={d.first} onClick={() => move(d.id, -1)} aria-label={`Move ${d.name} earlier`}>

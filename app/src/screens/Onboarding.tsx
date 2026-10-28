@@ -44,7 +44,17 @@ export function Create() {
   const create = () => {
     if (!S.human) return flash('Tick the human check first');
     if (!S.evName.trim()) return;
-    set({ flow: 'created' });
+    // A new event starts with its own slots: yours first, the rest open for invited DJs.
+    set((s) => ({
+      flow: 'created',
+      order: s.slots.map((_, i) => (i === 0 ? 'me' : `slot${i}`)),
+      djs: Object.fromEntries(
+        s.slots.map((time, i) =>
+          i === 0 ? ['me', { ...s.djs.me, time }] : [`slot${i}`, { name: 'Open slot', time, tracks: null, open: true }],
+        ),
+      ),
+      view: 'me',
+    }));
   };
   return (
     <>

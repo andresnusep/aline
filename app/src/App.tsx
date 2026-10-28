@@ -79,7 +79,7 @@ export default function App() {
       <input type="file" accept=".txt,text/plain" ref={fileRef} onChange={onFile} hidden />
       {web ? <WebApp /> : <PhoneApp />}
       {toast && (
-        <div className={`toast${web ? ' web' : ''}`} role="status">
+        <div className={`toast${web ? ' toast-web' : ''}`} role="status">
           {toast}
         </div>
       )}
